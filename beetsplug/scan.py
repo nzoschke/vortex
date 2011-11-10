@@ -1,11 +1,12 @@
 from beets.plugins import BeetsPlugin
 from beets.ui import Subcommand
 
-my_super_command = Subcommand('super', help='do something super')
-def say_hi(lib, config, opts, args):
-    print "Hello everybody! I'm a plugin!"
-my_super_command.func = say_hi
+scan_command = Subcommand('scan', help='scan directory for updates')
+def scan(lib, config, opts, args):
+    d = config.get("beets", "directory")
+    print "Scanning %s..." % d
+scan_command.func = scan
 
 class SuperPlug(BeetsPlugin):
     def commands(self):
-        return [my_super_command]
+        return [scan_command]

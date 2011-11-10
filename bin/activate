@@ -1,4 +1,13 @@
 #!/bin/bash
+BIN_DIR=$(cd $(dirname $0); pwd)
+APP_DIR=$(dirname $BIN_DIR)
+CUR_DIR=$(pwd)
+
+[ -f $APP_DIR/.env ] && {
+  echo "Sourcing app .env..."
+  cd $APP_DIR && source .env && cd $CUR_DIR
+}
+
 source ~/.bash_profile
 source .cache/${1:-local-env}/bin/activate
 env bash -i

@@ -1,0 +1,4 @@
+#!/bin/bash
+source ~/.bash_profile
+source .cache/${1:-local-env}/bin/activate
+env bash -i

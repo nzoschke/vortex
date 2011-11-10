@@ -1,5 +1,5 @@
 import unittest
-from vortex import SpotifyLink
+from vortex import SpotifyLink, APP_DIR
 
 class TestSpotifyLink(unittest.TestCase):
   def setUp(self):
@@ -30,8 +30,12 @@ class TestSpotifyLink(unittest.TestCase):
     self.assertEqual("Kavinsky/Drive/Nightcall", str(u))
 
   def test_local_url(self):
-    u = SpotifyLink(self.urls[1])
+    u = SpotifyLink(self.urls[1])    
     self.assertEqual("Desire/Drive/Under Your Spell", str(u))
+
+  def test_path(self):
+    u = SpotifyLink(self.urls[1])
+    self.assertEqual("%s/davroot/music/Drive/02. Desire - Under Your Spell.mp3" % APP_DIR, u.path())
 
 if __name__ == '__main__':
   unittest.main()

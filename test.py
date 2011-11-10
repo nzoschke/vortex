@@ -1,4 +1,44 @@
+import requests
 import unittest
+from urlparse import urlparse
+
+from BeautifulSoup import BeautifulSoup
+
+from xml.dom.minidom import parseString
+
+
+class SpotifyLink(object):
+  title       = None
+  artist      = None
+  album       = None
+  albumartist = None 
+  track       = 0
+  duration    = 0
+
+  def __init__(self, url):
+    self.url = urlparse(url)
+    if self.url.path.startswith("/local"):
+      path = self.url.path.replace("+", " ")
+      _, _, self.artist, self.album, self.title, _ = path.split("/")
+    else:
+      song = BeautifulSoup(requests.get(self.url.geturl()).content)
+      self.title    = song.find("meta", property="og:title")["content"]
+      self.track    = int(song.find("meta", property="music:album:track")["content"])
+      self.duration = int(song.find("meta", property="music:duration")["content"])
+
+      # query for album
+      album_url = song.find("meta", property="music:album")["content"]
+      album = BeautifulSoup(requests.get(album_url).content)
+      self.album = album.find("meta", property="og:title")["content"]
+
+      # query for album artist
+      artist_url = song.find("meta", property="music:musician")["content"]
+      artist = BeautifulSoup(requests.get(artist_url).content)
+      self.artist = artist.find("meta", property="og:title")["content"]
+
+  def __str__(self):
+    return u"%s/%s/%s" % (self.artist, self.album, self.title)
+
 
 class TestResolver(unittest.TestCase):
   def setUp(self):
@@ -24,8 +64,13 @@ class TestResolver(unittest.TestCase):
       'http://open.spotify.com/track/72wBv8yFC7CrSEJ6WxTklQ'
     ]
 
-  def test_shuffle(self):
-    self.assert_(True)
+  def test_track_url(self):
+    u = SpotifyLink(self.urls[0])
+    self.assertEqual("Kavinsky/Drive/Nightcall", str(u))
+
+  def test_local_url(self):
+    u = SpotifyLink(self.urls[1])
+    self.assertEqual("Desire/Drive/Under Your Spell", str(u))
 
 if __name__ == '__main__':
   unittest.main()

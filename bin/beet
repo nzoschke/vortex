@@ -10,6 +10,9 @@ library: %(app_dir)s/musiclibrary.blb
 directory: %(app_dir)s/davroot
 import_copy: no
 import_write: no
+import_delete: no
+import_art: no
+import_log: %(app_dir)s/import.log
 
 plugins = bpd scan
 pluginpath: %(app_dir)s

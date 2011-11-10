@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+import os, StringIO, sys
+from beets.ui import main
+from pkg_resources import fixup_namespace_packages
+
+app_dir = os.path.abspath(os.path.join(__file__, "..", ".."))
+config = """
+[beets]
+library: %(app_dir)s/musiclibrary.blb
+directory: %(app_dir)s/davroot
+import_copy: no
+import_write: no
+
+plugins = bpd scan
+pluginpath: %(app_dir)s
+""" % locals()
+
+fixup_namespace_packages(app_dir)
+main(configfh=StringIO.StringIO(config))

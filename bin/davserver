@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import logging
+
+from DAVServer import server
+from DAVServer.fileauth import DAVAuthHandler
+
+log = logging.getLogger()
+
+class DAVPostHandler(DAVAuthHandler):
+    def do_POST(self):
+      """ Replacement for GET response. Not implemented here. """
+      content_len = int(self.headers.getheader('content-length'))
+      urls = self.rfile.read(content_len)
+      log.debug(repr(urls))
+      log.debug(len(urls.split("\n")))
+      self.send_body(None, '405', 'Method Not Allowed', 'Method Not Allowed')
+
+DAVPostHandler._config = server.setupDummyConfig(lockemulation=True)
+
+server.runserver(
+  port=8008,
+  host="localhost",
+  directory="./data",
+  verbose=True,
+  noauth=True,
+  user=None,
+  password=None,
+  handler=DAVPostHandler
+)

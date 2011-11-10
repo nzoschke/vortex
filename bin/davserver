@@ -20,7 +20,7 @@ DAVPostHandler._config = server.setupDummyConfig(lockemulation=True)
 server.runserver(
   port=8008,
   host="localhost",
-  directory="./data",
+  directory="./root",
   verbose=True,
   noauth=True,
   user=None,

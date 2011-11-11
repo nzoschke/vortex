@@ -1,8 +1,14 @@
 #!/usr/bin/env python
-import logging
+import md5, os, logging, shutil, sys
 
 from DAVServer import server
 from DAVServer.fileauth import DAVAuthHandler
+
+app_dir = os.path.abspath(os.path.join(__file__, "..", ".."))
+sys.path.append(app_dir)
+
+from vortex import SpotifyLink, APP_DIR
+SEARCH_DIR = os.path.join(APP_DIR, "davroot", "searches")
 
 log = logging.getLogger()
 
@@ -11,8 +17,14 @@ class DAVPostHandler(DAVAuthHandler):
       """ Replacement for GET response. Not implemented here. """
       content_len = int(self.headers.getheader('content-length'))
       urls = self.rfile.read(content_len)
-      log.debug(repr(urls))
-      log.debug(len(urls.split("\n")))
+      m = md5.new()
+      m.update(urls)
+      paths = [SpotifyLink(url).path() for url in urls.strip().split("\n")]
+      dest = os.path.join(SEARCH_DIR, m.hexdigest())
+      if not os.path.exists(dest):
+        os.mkdir(dest)
+      for path in paths:
+        shutil.copy(path, dest)
       self.send_body(None, '405', 'Method Not Allowed', 'Method Not Allowed')
 
 DAVPostHandler._config = server.setupDummyConfig(lockemulation=True)

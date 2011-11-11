@@ -14,7 +14,7 @@ import_delete: no
 import_art: no
 import_log: %(app_dir)s/import.log
 
-plugins = bpd scan
+plugins = bpd scan web2
 pluginpath: %(app_dir)s
 """ % locals()
 

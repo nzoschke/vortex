@@ -52,23 +52,23 @@ def teardown_request(req):
 
 # Items.
 
-@app.route('/item/<int:item_id>')
+@app.route('/beet/item/<int:item_id>')
 def single_item(item_id):
     item = g.lib.get_item(item_id)
     return flask.jsonify(_rep(item))
 
-@app.route('/item/')
+@app.route('/beet/item/')
 def all_items():
     c = g.lib.conn.execute("SELECT id FROM items")
     all_ids = [row[0] for row in c]
     return flask.jsonify(item_ids=all_ids)
 
-@app.route('/item/<int:item_id>/file')
+@app.route('/beet/item/<int:item_id>/file')
 def item_file(item_id):
     item = g.lib.get_item(item_id)
     return flask.send_file(item.path)
 
-@app.route('/item/query/<path:query>')
+@app.route('/beet/item/query/<path:query>')
 def item_query(query):
     parts = query.split('/')
     items = g.lib.items(parts)
@@ -77,24 +77,24 @@ def item_query(query):
 
 # Albums.
 
-@app.route('/album/<int:album_id>')
+@app.route('/beet/album/<int:album_id>')
 def single_album(album_id):
     album = g.lib.get_album(album_id)
     return flask.jsonify(_rep(album))
 
-@app.route('/album/')
+@app.route('/beet/album/')
 def all_albums():
     c = g.lib.conn.execute("SELECT id FROM albums")
     all_ids = [row[0] for row in c]
     return flask.jsonify(album_ids=all_ids)
 
-@app.route('/album/query/<path:query>')
+@app.route('/beet/album/query/<path:query>')
 def album_query(query):
     parts = query.split('/')
     albums = g.lib.albums(parts)
     return flask.jsonify(results=[_rep(album) for album in albums])
 
-@app.route('/album/<int:album_id>/art')
+@app.route('/beet/album/<int:album_id>/art')
 def album_art(album_id):
     album = g.lib.get_album(album_id)
     return flask.send_file(album.artpath)
@@ -102,7 +102,7 @@ def album_art(album_id):
 
 # UI.
 
-@app.route('/')
+@app.route('/beet/')
 def home():
     return flask.render_template('index.html')
 
@@ -111,7 +111,7 @@ def home():
 
 class WebPlugin(BeetsPlugin):
     def commands(self):
-        cmd = ui.Subcommand('web', help='start a Web interface')
+        cmd = ui.Subcommand('web2', help='start a Web interface')
         cmd.parser.add_option('-d', '--debug', action='store_true',
                               default=False, help='debug mode')
         def func(lib, config, opts, args):

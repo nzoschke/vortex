@@ -4,13 +4,13 @@
         <title>beets</title>
 
         <link rel="stylesheet"
-        href="{{ url_for('static', filename='beets.css') }}" type="text/css"> 
+        href="/beet/{{ url_for('static', filename='beets.css') }}" type="text/css"> 
 
-        <script src="{{ url_for('static', filename='jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='underscore.js') }}">
+        <script src="/beet/{{ url_for('static', filename='jquery.js') }}"></script>
+        <script src="/beet/{{ url_for('static', filename='underscore.js') }}">
         </script>
-        <script src="{{ url_for('static', filename='backbone.js') }}"></script>
-        <script src="{{ url_for('static', filename='beets.js') }}"></script>
+        <script src="/beet/{{ url_for('static', filename='backbone.js') }}"></script>
+        <script src="/beet/{{ url_for('static', filename='beets.js') }}"></script>
     </head>
     <body>
         <div id="header">

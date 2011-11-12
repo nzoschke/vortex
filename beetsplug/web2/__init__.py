@@ -52,23 +52,23 @@ def teardown_request(req):
 
 # Items.
 
-@app.route('/beet/item/<int:item_id>')
+@app.route('/item/<int:item_id>')
 def single_item(item_id):
     item = g.lib.get_item(item_id)
     return flask.jsonify(_rep(item))
 
-@app.route('/beet/item/')
+@app.route('/item/')
 def all_items():
     c = g.lib.conn.execute("SELECT id FROM items")
     all_ids = [row[0] for row in c]
     return flask.jsonify(item_ids=all_ids)
 
-@app.route('/beet/item/<int:item_id>/file')
+@app.route('/item/<int:item_id>/file')
 def item_file(item_id):
     item = g.lib.get_item(item_id)
     return flask.send_file(item.path)
 
-@app.route('/beet/item/query/<path:query>')
+@app.route('/item/query/<path:query>')
 def item_query(query):
     parts = query.split('/')
     items = g.lib.items(parts)
@@ -77,24 +77,24 @@ def item_query(query):
 
 # Albums.
 
-@app.route('/beet/album/<int:album_id>')
+@app.route('/album/<int:album_id>')
 def single_album(album_id):
     album = g.lib.get_album(album_id)
     return flask.jsonify(_rep(album))
 
-@app.route('/beet/album/')
+@app.route('/album/')
 def all_albums():
     c = g.lib.conn.execute("SELECT id FROM albums")
     all_ids = [row[0] for row in c]
     return flask.jsonify(album_ids=all_ids)
 
-@app.route('/beet/album/query/<path:query>')
+@app.route('/album/query/<path:query>')
 def album_query(query):
     parts = query.split('/')
     albums = g.lib.albums(parts)
     return flask.jsonify(results=[_rep(album) for album in albums])
 
-@app.route('/beet/album/<int:album_id>/art')
+@app.route('/album/<int:album_id>/art')
 def album_art(album_id):
     album = g.lib.get_album(album_id)
     return flask.send_file(album.artpath)
@@ -102,7 +102,7 @@ def album_art(album_id):
 
 # UI.
 
-@app.route('/beet/')
+@app.route('/')
 def home():
     return flask.render_template('index.html')
 

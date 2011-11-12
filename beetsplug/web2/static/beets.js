@@ -160,7 +160,7 @@ var router = new BeetsRouter();
 
 // Model.
 var Item = Backbone.Model.extend({
-    urlRoot: '/item'
+    urlRoot: '/beet/item'
 });
 var Items = Backbone.Collection.extend({
     model: Item

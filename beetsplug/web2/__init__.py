@@ -66,7 +66,9 @@ def all_items():
 @app.route('/item/<int:item_id>/file')
 def item_file(item_id):
     item = g.lib.get_item(item_id)
-    return flask.send_file(item.path)
+    path = item.path.replace("/home/data/", "")
+    return flask.redirect(path)
+    #return flask.send_file(item.path)
 
 @app.route('/item/query/<path:query>')
 def item_query(query):
